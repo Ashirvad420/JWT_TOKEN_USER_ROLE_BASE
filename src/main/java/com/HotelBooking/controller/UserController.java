@@ -1,5 +1,6 @@
 package com.HotelBooking.controller;
 
+import com.HotelBooking.dto.LoginDto;
 import com.HotelBooking.dto.PropertyUserDto;
 import com.HotelBooking.entity.PropertyUser;
 import com.HotelBooking.service.UserService;
@@ -23,7 +24,7 @@ public class UserController {
     }
 
     // http://localhost:8080/api/v1/users/addUser
-    @PostMapping("/addUser")
+    @PostMapping("/addUser")  // this is for SignUp
     public ResponseEntity<String> addUser(@RequestBody PropertyUserDto dto)
     {
        PropertyUser user = userService.addUser(dto);
@@ -32,6 +33,23 @@ public class UserController {
            return new ResponseEntity<>("sign up successfully", HttpStatus.CREATED);
        }
        return new ResponseEntity<>("something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
+
+
+    @PostMapping("/login")  // this is for SignIn
+    public ResponseEntity<String> login(@RequestBody LoginDto loginDto)
+    {
+        // Check username and password
+//        System.out.println(loginDto.getUsername());
+//        System.out.println(loginDto.getPassword());
+
+        boolean status = userService.verifyLogin(loginDto);
+        if (status) {
+            return new ResponseEntity<>("user sign in", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Invalid Credentials", HttpStatus.UNAUTHORIZED);
     }
 }
 
