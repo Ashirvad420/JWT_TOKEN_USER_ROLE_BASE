@@ -1,5 +1,7 @@
 package com.HotelBooking.controller;
 
+
+import com.HotelBooking.dto.JWTResponse;
 import com.HotelBooking.dto.LoginDto;
 import com.HotelBooking.dto.PropertyUserDto;
 import com.HotelBooking.entity.PropertyUser;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/users")
 public class UserController {
 
-    @Autowired
+
     private UserService userService;
 
     public UserController(UserService userService) {
@@ -39,18 +41,23 @@ public class UserController {
 
 
     @PostMapping("/login")  // this is for SignIn
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto)
+    public ResponseEntity<?> login(@RequestBody LoginDto loginDto)
     {
         // Check username and password
 //        System.out.println(loginDto.getUsername());
 //        System.out.println(loginDto.getPassword());
 
-        boolean status = userService.verifyLogin(loginDto);
-        if (status) {
-            return new ResponseEntity<>("user sign in", HttpStatus.OK);
+        // JWT Token
+        String jwtToken = userService.verifyLogin(loginDto);
+        if (jwtToken!=null)
+        {
+            JWTResponse jwtResponse = new JWTResponse();
+            jwtResponse.setToken(jwtToken);
+            return new ResponseEntity<>(jwtResponse, HttpStatus.OK);
         }
         return new ResponseEntity<>("Invalid Credentials", HttpStatus.UNAUTHORIZED);
     }
+
 }
 
 
