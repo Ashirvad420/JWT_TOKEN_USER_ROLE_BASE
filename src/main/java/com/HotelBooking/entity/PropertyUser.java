@@ -1,5 +1,6 @@
 package com.HotelBooking.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,9 +27,11 @@ public class PropertyUser {
     @Column(name = "email", nullable = false, unique = true, length = 55)
     private String email;
 
+    @JsonIgnore
     @Column(name = "user_role", nullable = false, length = 55)
     private String userRole;
 
+    @JsonIgnore
     @Column(name = "password", nullable = false)
     private String password;
 
